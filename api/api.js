@@ -9,6 +9,7 @@ var env;
 if (!process.env.ON_HEROKU) { 
     env = require('node-env-file');
     env(__dirname + '/.env');
+    
 }
 // Connecting to database 
 var query = "mongodb+srv://"+process.env.DBMONGOUSER+":"+process.env.DBMONGOPASS+"@"+process.env.DBMONGOSERV+"/"+process.env.DBMONGO+"?retryWrites=true&w=majority"

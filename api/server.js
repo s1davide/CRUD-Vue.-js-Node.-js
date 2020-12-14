@@ -1,11 +1,10 @@
 
 const express=require('express');  
 const api = require('./api'); 
-const env = require('node-env-file') ;
 const path = require('path');
+var env;
 
 
-env(__dirname + '/.env');
 
 const port= process.env.PORT ||  3000; 
 const app=express(); 
@@ -18,12 +17,20 @@ app.use((req, res, next) => {
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
-app.use('/',express.static(`${__dirname}/../tasks-app/dist/pwa/`));
+if (!process.env.ON_HEROKU) { 
+    env = require('node-env-file') ;
+    env(__dirname + '/.env');
+    app.use('/',express.static(`${__dirname}/../tasks-app/dist/pwa/`));
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, '../tasks-app/dist/pwa/index.html'));
+    });     
+}else{
+    app.use('/',express.static(`${__dirname}/front/`));
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, '/front/index.html'));
+    });     
+}
 
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../tasks-app/dist/pwa/index.html'));
-}); 
 
 app.listen(port, function() { 
     console.log("Server is listening at port:" + port); 
