@@ -97,7 +97,7 @@ components: { EssentialLink },
         url ='http://localhost:3000/api/obtenerTodos';      
       }
       else{
-        url = `${window.location.origin}/api/update`
+        url = `${window.location.origin}/api/obtenerTodos`
       }                    
       let self =this;      
       const res= fetch(url, {
