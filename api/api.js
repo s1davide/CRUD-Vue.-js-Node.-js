@@ -1,12 +1,19 @@
 var mongoose = require('mongoose'); 
 var express = require('express'); 
 var router = express.Router(); 
+const multer = require('multer');
 var TaskModel = require('./task_schema'); 
-const env = require('node-env-file') ;
-env(__dirname + '/.env');
+var env;
 
+
+if (!process.env.ON_HEROKU) { 
+    env = require('node-env-file');
+    env(__dirname + '/.env');
+}
 // Connecting to database 
 var query = "mongodb+srv://"+process.env.DBMONGOUSER+":"+process.env.DBMONGOPASS+"@"+process.env.DBMONGOSERV+"/"+process.env.DBMONGO+"?retryWrites=true&w=majority"
+//Multer
+const upload = multer();
 
 const db = (query); 
 mongoose.Promise = global.Promise; 
@@ -18,21 +25,24 @@ useUnifiedTopology: true }, function(error) {
 	} 
 }); 
 
+
 module.exports = router;
-router.post('/save', function(req, res) {
-    console.log(req);
-    let newTask = new TaskModel();
-    newTask.TaskId = req.body.id;
-    newTask.Name = req.body.nombre;
-    newTask.DeadLine = req.body.fecha_limite;    
-    console.log(req)
+router.post('/save', upload.none(),function(req, res) {
+    
+    let newTask = new TaskModel();    
+    //console.log(req.body)
+    let fecha = new Date(req.body.DeadLine);    
+    newTask.TaskId = req.body.TaskId;
+    newTask.Name = req.body.Name;
+    newTask.DeadLine = fecha;   
     
     newTask.save(function(err, data) {
         if(err) {
             console.log(err);
         }
         else {
-            res.send("Data inserted");
+            let respuesta = {"res" : "Agregado"};
+            res.send(respuesta);
         }
     });
 });
@@ -43,16 +53,15 @@ router.get('/obtenerTodos', function(req, res) {
         if(err){
             console.log(err);
         }
-        else{
+        else{            
             res.send(data);
-            datos = data;
         }
     });  
 });    
      
 
  router.post('/obtenerUno', function(req, res) {
-    TaskModel.findOne({TaskId: req.body.id}, function(err, data) {
+    TaskModel.findOne({TaskId: req.body.TaskId}, function(err, data) {
         if(err){
             console.log(err);
         }
@@ -61,30 +70,32 @@ router.get('/obtenerTodos', function(req, res) {
         }
     });  
  });
-router.post('/update', function(req, res) {  
-    TaskModel.updateOne({TaskId: req.body.id}, 
-    {Name: req.body.nombre,
-    DeadLine: req.body.fecha_limite
+router.post('/update',upload.none(), function(req, res) {       
+    TaskModel.updateOne({TaskId: req.body.TaskIdActual }, 
+    {TaskId: req.body.TaskId,
+    Name: req.body.Name,
+    DeadLine: req.body.DeadLine
     },        
     function(err, data) {
         if(err){
             console.log(err);
         }
         else{            
-            res.send(data);
-            console.log("Data Updated!");
+            let respuesta = {"res" : "Modificado"};
+            res.send(respuesta);
         }
     });  
 });
-router.delete('/delete', function(req, res) {    
-    TaskModel.deleteOne({TaskId:req.body.id}, 
+router.delete('/delete',upload.none(), function(req, res) {   
+    console.log(req.body) 
+    TaskModel.deleteOne({TaskId: req.body.TaskId}, 
     function(err, data) {
         if(err){
             console.log(err);
         }
         else{
-           res.send(data);
-            console.log("Data Deleted!");
+            let respuesta = {"res" : "Borrado"};
+            res.send(respuesta); 
         }
     });  
 });

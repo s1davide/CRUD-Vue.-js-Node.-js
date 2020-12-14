@@ -1,0 +1,54 @@
+{
+  "name": "tasks-app",
+  "version": "0.0.1",
+  "description": "Demo quasar",
+  "productName": "Quasar App",
+  "author": "Sebastian David Estrada Ojeda",
+  "private": true,
+  "scripts": {
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "build:pwa": "quasar build -m pwa",
+    "test": "echo \"No test specified\" && exit 0",
+    "lint": "eslint --ext .js,.ts,.vue ./"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.0.0",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
+    "@vue/composition-api": "^0.6.4",
+    "babel-eslint": "^10.0.1",
+    "core-js": "^3.6.5",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.1.2",
+    "quasar": "^1.0.0",
+    "quasar-extras": "^2.0.9"
+  },
+  "devDependencies": {
+    "@quasar/app": "^2.0.0",
+    "@types/node": "^10.17.15",
+    "workbox-webpack-plugin": "^5.1.4"
+  },
+  "browserslist": [
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ],
+  "engines": {
+    "node": ">= 10.18.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  }
+}
